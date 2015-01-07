@@ -1,16 +1,21 @@
 package com.example.iem.skatespotfinder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.parse.Parse;
 import com.parse.ui.ParseLoginBuilder;
 
 
 public class MainActivity extends Activity {
-
+    private static final String TAG = "MainActivity";
+    private ImageButton mImageButtonMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +25,14 @@ public class MainActivity extends Activity {
 
         ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
         startActivityForResult(builder.build(), 0);
+        mImageButtonMap = (ImageButton)findViewById(R.id.imageButtonMap);
+        mImageButtonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent lIntentMap = new  Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(lIntentMap);
+            }
+        });
     }
 
 
@@ -44,4 +57,5 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
