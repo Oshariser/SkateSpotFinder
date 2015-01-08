@@ -2,10 +2,13 @@ package com.example.iem.skatespotfinder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
-import android.support.v7.app.ActionBarActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,18 +20,24 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
+import java.io.File;
+
 
 public class AddSpotActivity extends Activity {
-    private LatLng mLatLng;
+
+    private double mLatitude;
+    private double mLongitude;
+    private Uri mUri;
 
     private Button mButtonGetLocalisation;
     private TextView mTextViewLatitude;
     private TextView mTextViewLongitude;
     private ImageView mImageViewSpot;
+    private TextView mTextViewUri;
+    private Button mButtonBrowse;
     private RatingBar mRatingBarSpot;
     private EditText mEditTextDescription;
     private Button mButtonAddSpot;
@@ -37,42 +46,32 @@ public class AddSpotActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_spot);
-
         mButtonGetLocalisation = (Button) findViewById(R.id.buttonGetLocalisation);
         mButtonGetLocalisation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocationManager mLocationManager=null;
-                LocationListener mLocationListener;
-                mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                mLocationListener = new MyLocationListener();
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-
-                if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    //if(MyLocationListener.mLatitude>0)
-                    //{
-                        mTextViewLatitude.setText("Latitude:- " + MyLocationListener.mLatitude);
-                        mTextViewLongitude.setText("Longitude:- " + MyLocationListener.mLongitude);
-                    /*}
-                    else
-                    {
-                        Toast.makeText(AddSpotActivity.this, "GPS in progress, please wait.", Toast.LENGTH_LONG).show();
-                    }*/
-                } else {
-                    Toast.makeText(AddSpotActivity.this, "GPS is not turned on...", Toast.LENGTH_LONG).show();
-                }
+                getCurrentLocalisation();
             }
         });
         mTextViewLatitude = (TextView) findViewById(R.id.textViewLatitude);
         mTextViewLongitude = (TextView) findViewById(R.id.textViewLongitude);
         mImageViewSpot = (ImageView)findViewById(R.id.imageViewSpot);
+        mTextViewUri = (TextView) findViewById(R.id.textViewUri);
+        mButtonBrowse = (Button) findViewById(R.id.buttonBrowse);
+        mButtonBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFileBrowser();
+            }
+        });
         mRatingBarSpot = (RatingBar)findViewById(R.id.ratingBarSpot);
         mEditTextDescription = (EditText)findViewById(R.id.editTextDescription);
         mButtonAddSpot = (Button)findViewById(R.id.buttonAddSpot);
         mButtonAddSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Spot lSpot = new Spot();
+                Spot lSpot = new Spot(mLatitude, mLongitude, null, mRatingBarSpot.getRating(), mEditTextDescription.getText().toString());
+                addSpot(lSpot);
             }
         });
     }
@@ -90,21 +89,62 @@ public class AddSpotActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void addSpot(Spot aSpot){
         ParseObject lParseObject = new ParseObject("Spot");
         lParseObject.put("localisation", new ParseGeoPoint(aSpot.getLatitude(), aSpot.getLongitude()));
-        lParseObject.put("image", aSpot.getImage());
+        //lParseObject.put("image", aSpot.getImage());
         lParseObject.put("rating", aSpot.getRating());
         lParseObject.put("description", aSpot.getDescription());
         lParseObject.saveInBackground();
+    }
+
+    private void getCurrentLocalisation(){
+        LocationManager lLocationManager = null;
+        LocationListener lLocationListener;
+        lLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        lLocationListener = new MyLocationListener();
+        lLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, lLocationListener);
+        if (lLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mLatitude = MyLocationListener.mLatitude;
+            mLongitude = MyLocationListener.mLongitude;
+            mTextViewLatitude.setText("Latitude: - " + mLatitude);
+            mTextViewLongitude.setText("Longitude: - " + mLongitude);
+        } else {
+            Toast.makeText(AddSpotActivity.this, "GPS is not turned on ...", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getFileBrowser(){
+        Intent lIntent = new Intent();
+        lIntent.setType("image/*");
+        lIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(lIntent, "Select picture"), 1);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                mUri = data.getData();
+                mTextViewUri.setText(mUri.toString());
+                Bitmap lBitmap = getPictureFromUri(mUri);
+                mImageViewSpot.setImageBitmap(lBitmap);
+            }
+        }
+    }
+
+    private Bitmap getPictureFromUri(Uri aUri){
+        File lFile = new File(aUri.getPath());
+        Bitmap lBitmap = null;
+        if(lFile.exists()) {
+            lBitmap = BitmapFactory.decodeFile(lFile.getAbsolutePath());
+        }
+        return lBitmap;
     }
 }

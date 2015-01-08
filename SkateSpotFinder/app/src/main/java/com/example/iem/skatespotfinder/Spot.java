@@ -7,10 +7,10 @@ public class Spot {
     private double mLatitude;
     private double mLongitude;
     private byte[] mImage;
-    private int mRating;
+    private float mRating;
     private String mDescription;
 
-    public Spot(double aLatitude, double aLongitude, byte[] aImage, int aRating, String aDescription) {
+    public Spot(double aLatitude, double aLongitude, byte[] aImage, float aRating, String aDescription) {
         this.setLatitude(aLatitude);
         this.setLongitude(aLongitude);
         this.setImage(aImage);
@@ -42,11 +42,11 @@ public class Spot {
         this.mImage = mImage;
     }
 
-    public int getRating() {
+    public float getRating() {
         return mRating;
     }
 
-    public void setRating(int mRating) {
+    public void setRating(float mRating) {
         this.mRating = mRating;
     }
 
