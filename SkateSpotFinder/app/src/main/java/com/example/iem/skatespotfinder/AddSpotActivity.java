@@ -3,6 +3,7 @@ package com.example.iem.skatespotfinder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.LocationListener;
@@ -10,6 +11,8 @@ import android.location.LocationManager;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -114,8 +117,8 @@ public class AddSpotActivity extends Activity {
         if (lLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLatitude = MyLocationListener.mLatitude;
             mLongitude = MyLocationListener.mLongitude;
-            mTextViewLatitude.setText("Latitude: - " + mLatitude);
-            mTextViewLongitude.setText("Longitude: - " + mLongitude);
+            mTextViewLatitude.setText("Latitude : " + mLatitude);
+            mTextViewLongitude.setText("Longitude : " + mLongitude);
         } else {
             Toast.makeText(AddSpotActivity.this, "GPS is not turned on ...", Toast.LENGTH_LONG).show();
         }
@@ -140,11 +143,25 @@ public class AddSpotActivity extends Activity {
     }
 
     private Bitmap getPictureFromUri(Uri aUri){
-        File lFile = new File(aUri.getPath());
+        File lFile = new File(getRealPathFromURI(aUri));
         Bitmap lBitmap = null;
+        Log.v("SkateSpotFinder", "ok_1");
         if(lFile.exists()) {
+            Log.v("SkateSpotFinder", "ok_2");
             lBitmap = BitmapFactory.decodeFile(lFile.getAbsolutePath());
         }
         return lBitmap;
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String res = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if(cursor.moveToFirst()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
     }
 }
