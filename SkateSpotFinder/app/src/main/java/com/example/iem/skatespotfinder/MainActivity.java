@@ -14,8 +14,12 @@ import com.parse.ui.ParseLoginBuilder;
 
 
 public class MainActivity extends Activity {
+
     private static final String TAG = "MainActivity";
     private ImageButton mImageButtonMap;
+    private ImageButton mImageButtonAddSpot;
+    private ImageButton mImageButtonFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +29,7 @@ public class MainActivity extends Activity {
 
         ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
         startActivityForResult(builder.build(), 0);
+
         mImageButtonMap = (ImageButton)findViewById(R.id.imageButtonMap);
         mImageButtonMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,8 +38,25 @@ public class MainActivity extends Activity {
                 startActivity(lIntentMap);
             }
         });
-    }
 
+        mImageButtonAddSpot = (ImageButton)findViewById(R.id.imageButtonAddSpot);
+        mImageButtonAddSpot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent lIntentAddSpot = new  Intent(getApplicationContext(), AddSpotActivity.class);
+                startActivity(lIntentAddSpot);
+            }
+        });
+
+        mImageButtonFavorite = (ImageButton)findViewById(R.id.imageButtonFavorite);
+        mImageButtonFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent lIntentFavorite = new  Intent(getApplicationContext(), FavoriteActivity.class);
+                startActivity(lIntentFavorite);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
