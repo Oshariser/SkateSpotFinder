@@ -52,10 +52,10 @@ public class FavoriteActivity extends Activity {
 
     private List<Spot> getSpots() {
         List<Spot> list = new ArrayList<Spot>();
-        list.add(new Spot(null, 2 ,"description 1"));
+        /*list.add(new Spot(null, 2 ,"description 1"));
         list.add(new Spot(null, 4 ,"description 2"));
         list.add(new Spot(null, 6 ,"description 3"));
-
+        */
         return list;
     }
 }
