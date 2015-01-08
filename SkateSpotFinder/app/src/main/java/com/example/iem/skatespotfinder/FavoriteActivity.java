@@ -1,19 +1,32 @@
 package com.example.iem.skatespotfinder;
 
+import android.app.Activity;
+import android.app.ListActivity;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class FavoriteActivity extends ActionBarActivity {
+public class FavoriteActivity extends Activity {
+
+    ListView mListViewFavoriteSpots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
+        mListViewFavoriteSpots = (ListView)findViewById(R.id.listViewFavoriteSpots);
+        ArrayAdapter<Spot> adapter = new Adapter(this,
+                getSpots());
+        mListViewFavoriteSpots.setAdapter(adapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +48,14 @@ public class FavoriteActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<Spot> getSpots() {
+        List<Spot> list = new ArrayList<Spot>();
+        list.add(new Spot(null, 2 ,"description 1"));
+        list.add(new Spot(null, 4 ,"description 2"));
+        list.add(new Spot(null, 6 ,"description 3"));
+
+        return list;
     }
 }

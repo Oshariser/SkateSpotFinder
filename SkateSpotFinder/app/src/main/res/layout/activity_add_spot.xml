@@ -5,56 +5,50 @@
     android:orientation="vertical"
     tools:context="com.example.iem.skatespotfinder.AddSpotActivity">
 
-    <Button
-        android:id="@+id/buttonGetLocalisation"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/button_get_localisation" />
-
-    <TextView
-        android:id="@+id/textViewLatitude"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/textViewLongitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/imageViewSpot"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_gallery" />
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/textViewUri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Browse Image"
+            android:id="@+id/buttonBrowseImage"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="2" />
 
-    <Button
-        android:id="@+id/buttonBrowse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_browse"/>
+        <ImageView
+            android:id="@+id/imageViewSpot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:src="@android:drawable/ic_menu_gallery" />
+    </LinearLayout>
 
     <RatingBar
         android:id="@+id/ratingBarSpot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="4"/>
 
     <Button
         android:id="@+id/buttonAddSpot"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
 
 </LinearLayout>
