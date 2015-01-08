@@ -6,7 +6,7 @@
     tools:context="com.example.iem.skatespotfinder.AddSpotActivity">
 
     <Button
-        android:id="@+id/buttonLocalisation"
+        android:id="@+id/buttonGetLocalisation"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/button_get_localisation"

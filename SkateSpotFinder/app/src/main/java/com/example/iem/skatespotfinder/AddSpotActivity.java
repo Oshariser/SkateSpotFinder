@@ -1,5 +1,6 @@
 package com.example.iem.skatespotfinder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,42 +22,42 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 
-public class AddSpotActivity extends ActionBarActivity {
+public class AddSpotActivity extends Activity {
     private LatLng mLatLng;
 
-    private Button mButtonLocalisation;
+    private Button mButtonGetLocalisation;
     private TextView mTextViewLatitude;
     private TextView mTextViewLongitude;
     private ImageView mImageViewSpot;
     private RatingBar mRatingBarSpot;
     private EditText mEditTextDescription;
-    private Button mButtonAdd;
+    private Button mButtonAddSpot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_spot);
 
-        mButtonLocalisation = (Button) findViewById(R.id.buttonLocalisation);
-        mButtonLocalisation.setOnClickListener(new View.OnClickListener() {
+        mButtonGetLocalisation = (Button) findViewById(R.id.buttonGetLocalisation);
+        mButtonGetLocalisation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LocationManager mLocationManager=null;
                 LocationListener mLocationListener;
                 mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
                 mLocationListener = new MyLocationListener();
-                mLocationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
 
                 if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if(MyLocationListener.mLatitude>0)
-                    {
-                        mTextViewLatitude.append("Latitude:- " + MyLocationListener.mLatitude + '\n');
-                        mTextViewLongitude.append("Longitude:- " + MyLocationListener.mLongitude + '\n');
-                    }
+                    //if(MyLocationListener.mLatitude>0)
+                    //{
+                        mTextViewLatitude.setText("Latitude:- " + MyLocationListener.mLatitude);
+                        mTextViewLongitude.setText("Longitude:- " + MyLocationListener.mLongitude);
+                    /*}
                     else
                     {
                         Toast.makeText(AddSpotActivity.this, "GPS in progress, please wait.", Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 } else {
                     Toast.makeText(AddSpotActivity.this, "GPS is not turned on...", Toast.LENGTH_LONG).show();
                 }
@@ -67,8 +68,8 @@ public class AddSpotActivity extends ActionBarActivity {
         mImageViewSpot = (ImageView)findViewById(R.id.imageViewSpot);
         mRatingBarSpot = (RatingBar)findViewById(R.id.ratingBarSpot);
         mEditTextDescription = (EditText)findViewById(R.id.editTextDescription);
-        mButtonAdd = (Button)findViewById(R.id.buttonAddSpot);
-        mButtonAdd.setOnClickListener(new View.OnClickListener() {
+        mButtonAddSpot = (Button)findViewById(R.id.buttonAddSpot);
+        mButtonAddSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Spot lSpot = new Spot();
