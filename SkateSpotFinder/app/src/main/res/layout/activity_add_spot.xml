@@ -5,6 +5,25 @@
     android:orientation="vertical"
     tools:context="com.example.iem.skatespotfinder.AddSpotActivity">
 
+    <Button
+        android:id="@+id/buttonLocalisation"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/button_get_localisation"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/textViewLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/textViewLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
     <ImageView
         android:id="@+id/imageViewSpot"
         android:layout_width="wrap_content"
@@ -34,6 +53,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
-
 
 </LinearLayout>
