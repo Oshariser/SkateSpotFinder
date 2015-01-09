@@ -18,7 +18,7 @@ public class Spot {
     public Spot(double aLatitude, double aLongitude, File aImage, float aRating, String aDescription) {
         this.setLatitude(aLatitude);
         this.setLongitude(aLongitude);
-        this.setImage(aImage);
+        //this.setImage(aImage);
         this.setRating(aRating);
         this.setDescription(aDescription);
     }

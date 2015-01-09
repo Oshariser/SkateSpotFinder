@@ -1,6 +1,8 @@
 package com.example.iem.skatespotfinder;
 
 import android.app.Activity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by root on 1/8/15.
@@ -56,8 +60,25 @@ public class Adapter extends ArrayAdapter<Spot>{
             ((ViewHolder) lView.getTag()).imageButton.setTag(mSpots.get(aPosition));
         }
         ViewHolder holder = (ViewHolder) lView.getTag();
-        holder.textView.setText(mSpots.get(aPosition).getDescription());
-        holder.imageView.setImageResource(R.drawable.blank_board);
+        holder.textView.setText(mSpots.get(aPosition).getDescription() + " " + getAdressFromLatLong(mSpots.get(aPosition).getLatitude(), mSpots.get(aPosition).getLongitude()));
+        //holder.imageView.setImageResource();
         return lView;
+    }
+
+    private String getAdressFromLatLong(double aLatitude, double aLongitude) {
+        Geocoder geocoder;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(aLatitude, aLongitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getAddressLine(1);
+        String country = addresses.get(0).getAddressLine(2);
+
+        return address + " " + city;
     }
 }
