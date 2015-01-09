@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import java.io.File;
@@ -33,12 +35,12 @@ public class AddSpotActivity extends Activity {
     private double mLatitude;
     private double mLongitude;
     private Uri mUri;
+    private File mFile;
     private static final int TAKE_PICTURE = 1;
     private Button mButtonGetLocalisation;
     private TextView mTextViewLatitude;
     private TextView mTextViewLongitude;
     private ImageView mImageViewSpot;
-    private TextView mTextViewUri;
     private Button mButtonBrowse;
     private RatingBar mRatingBarSpot;
     private EditText mEditTextDescription;
@@ -58,7 +60,6 @@ public class AddSpotActivity extends Activity {
         mTextViewLatitude = (TextView) findViewById(R.id.textViewLatitude);
         mTextViewLongitude = (TextView) findViewById(R.id.textViewLongitude);
         mImageViewSpot = (ImageView)findViewById(R.id.imageViewSpot);
-        mTextViewUri = (TextView) findViewById(R.id.textViewUri);
         mButtonBrowse = (Button) findViewById(R.id.buttonBrowse);
         mButtonBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +73,7 @@ public class AddSpotActivity extends Activity {
         mButtonAddSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spot lSpot = new Spot(mLatitude, mLongitude, null, mRatingBarSpot.getRating(), mEditTextDescription.getText().toString());
+                Spot lSpot = new Spot(mLatitude, mLongitude, mFile, mRatingBarSpot.getRating(), mEditTextDescription.getText().toString());
                 addSpot(lSpot);
             }
         });
@@ -80,10 +81,10 @@ public class AddSpotActivity extends Activity {
 
     private void takePicture() {
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        mFile = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        mUri = Uri.fromFile(photo);
+                Uri.fromFile(mFile));
+        mUri = Uri.fromFile(mFile);
         startActivityForResult(intent, TAKE_PICTURE);
     }
 
@@ -108,7 +109,8 @@ public class AddSpotActivity extends Activity {
     private void addSpot(Spot aSpot){
         ParseObject lParseObject = new ParseObject("Spot");
         lParseObject.put("localisation", new ParseGeoPoint(aSpot.getLatitude(), aSpot.getLongitude()));
-        //lParseObject.put("image", aSpot.getImage());
+        ParseFile lParsefile = new ParseFile("Pic.jpg", aSpot.getImage());
+        lParseObject.put("photo", lParsefile);
         lParseObject.put("rating", aSpot.getRating());
         lParseObject.put("description", aSpot.getDescription());
         lParseObject.saveInBackground();
@@ -132,14 +134,12 @@ public class AddSpotActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         switch (requestCode) {
             case TAKE_PICTURE:
                 if (resultCode == Activity.RESULT_OK) {
                     setImageSpot();
                 }
         }
-
     }
 
     private void setImageSpot() {
@@ -148,15 +148,10 @@ public class AddSpotActivity extends Activity {
         ContentResolver lContentResolver = getContentResolver();
         Bitmap lBitmap;
         try {
-            lBitmap = MediaStore.Images.Media
-                    .getBitmap(lContentResolver, lUri);
-
+            lBitmap = MediaStore.Images.Media.getBitmap(lContentResolver, lUri);
             mImageViewSpot.setImageBitmap(lBitmap);
-            Toast.makeText(this, lUri.toString(),
-                    Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
             Log.e("Camera", e.toString());
         }
     }
