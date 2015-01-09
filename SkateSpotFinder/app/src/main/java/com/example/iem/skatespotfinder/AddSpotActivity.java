@@ -126,8 +126,8 @@ public class AddSpotActivity extends Activity {
         if (lLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLatitude = MyLocationListener.mLatitude;
             mLongitude = MyLocationListener.mLongitude;
-            mTextViewLatitude.setText("Latitude: - " + mLatitude);
-            mTextViewLongitude.setText("Longitude: - " + mLongitude);
+            mTextViewLatitude.setText("Latitude : " + mLatitude);
+            mTextViewLongitude.setText("Longitude : " + mLongitude);
         } else {
             Toast.makeText(AddSpotActivity.this, "GPS is not turned on ...", Toast.LENGTH_LONG).show();
         }
