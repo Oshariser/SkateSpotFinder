@@ -1,6 +1,7 @@
 package com.example.iem.skatespotfinder;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -34,7 +36,7 @@ public class AddSpotActivity extends Activity {
     private double mLatitude;
     private double mLongitude;
     private Uri mUri;
-
+    private static final int TAKE_PICTURE = 1;
     private Button mButtonGetLocalisation;
     private TextView mTextViewLatitude;
     private TextView mTextViewLongitude;
@@ -64,7 +66,7 @@ public class AddSpotActivity extends Activity {
         mButtonBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                takePicture();
             }
         });
         mRatingBarSpot = (RatingBar)findViewById(R.id.ratingBarSpot);
@@ -79,6 +81,15 @@ public class AddSpotActivity extends Activity {
         });
     }
 
+    private void takePicture() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        mUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,11 +99,9 @@ public class AddSpotActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_settings) {
             return true;
         }
@@ -124,14 +133,35 @@ public class AddSpotActivity extends Activity {
         }
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                mUri = data.getData();
-                mTextViewUri.setText(mUri.toString());
-                //Bitmap lBitmap = getPictureFromUri(mUri);
-                //mImageViewSpot.setImageBitmap(lBitmap);
-            }
+
+        switch (requestCode) {
+            case TAKE_PICTURE:
+                if (resultCode == Activity.RESULT_OK) {
+                    setImageSpot();
+                }
+        }
+
+    }
+
+    private void setImageSpot() {
+        Uri lUri = mUri;
+        getContentResolver().notifyChange(lUri, null);
+        ContentResolver lContentResolver = getContentResolver();
+        Bitmap lBitmap;
+        try {
+            lBitmap = MediaStore.Images.Media
+                    .getBitmap(lContentResolver, lUri);
+
+            mImageViewSpot.setImageBitmap(lBitmap);
+            Toast.makeText(this, lUri.toString(),
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+                    .show();
+            Log.e("Camera", e.toString());
         }
     }
+
 }
