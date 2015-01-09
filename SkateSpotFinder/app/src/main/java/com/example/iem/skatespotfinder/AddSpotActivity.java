@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,10 +23,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-
 import java.io.File;
 
 
