@@ -1,5 +1,10 @@
 package com.example.iem.skatespotfinder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Created by root on 1/8/15.
  */
@@ -10,7 +15,7 @@ public class Spot {
     private float mRating;
     private String mDescription;
 
-    public Spot(double aLatitude, double aLongitude, byte[] aImage, float aRating, String aDescription) {
+    public Spot(double aLatitude, double aLongitude, File aImage, float aRating, String aDescription) {
         this.setLatitude(aLatitude);
         this.setLongitude(aLongitude);
         this.setImage(aImage);
@@ -38,8 +43,17 @@ public class Spot {
         return mImage;
     }
 
-    public void setImage(byte[] mImage) {
-        this.mImage = mImage;
+    public void setImage(File mImage) {
+        byte[] lByte = new byte[(int) mImage.length()];
+        try {
+            FileInputStream lFileInputStream = new FileInputStream(mImage);
+            lFileInputStream.read(lByte);
+            lFileInputStream.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.mImage = lByte;
     }
 
     public float getRating() {

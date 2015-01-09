@@ -64,7 +64,7 @@ public class AddSpotActivity extends Activity {
         mButtonBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFileBrowser();
+
             }
         });
         mRatingBarSpot = (RatingBar)findViewById(R.id.ratingBarSpot);
@@ -124,44 +124,14 @@ public class AddSpotActivity extends Activity {
         }
     }
 
-    private void getFileBrowser(){
-        Intent lIntent = new Intent();
-        lIntent.setType("image/*");
-        lIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(lIntent, "Select picture"), 1);
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 mUri = data.getData();
                 mTextViewUri.setText(mUri.toString());
-                Bitmap lBitmap = getPictureFromUri(mUri);
-                mImageViewSpot.setImageBitmap(lBitmap);
+                //Bitmap lBitmap = getPictureFromUri(mUri);
+                //mImageViewSpot.setImageBitmap(lBitmap);
             }
         }
-    }
-
-    private Bitmap getPictureFromUri(Uri aUri){
-        File lFile = new File(getRealPathFromURI(aUri));
-        Bitmap lBitmap = null;
-        Log.v("SkateSpotFinder", "ok_1");
-        if(lFile.exists()) {
-            Log.v("SkateSpotFinder", "ok_2");
-            lBitmap = BitmapFactory.decodeFile(lFile.getAbsolutePath());
-        }
-        return lBitmap;
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String res = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if(cursor.moveToFirst()){
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
-        }
-        cursor.close();
-        return res;
     }
 }
