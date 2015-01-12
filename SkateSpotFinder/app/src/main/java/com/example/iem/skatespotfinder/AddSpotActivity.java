@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
