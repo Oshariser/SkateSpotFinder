@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity {
@@ -64,13 +65,13 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        /*List<Spot> lListSpot = Spots.getRemoteSpots();
+        List<Spot> lListSpot = Spots.getListSpots();
         MarkerOptions lMarker;
         for(Spot lSpot : lListSpot){
             lMarker = new MarkerOptions();
             lMarker.position(new LatLng(lSpot.getLatitude(), lSpot.getLongitude()));
             mMap.addMarker(lMarker);
-        }*/
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Method.getCurrentLocalisation(this), 11.0f));
     }
 }

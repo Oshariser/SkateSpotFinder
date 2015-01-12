@@ -15,10 +15,18 @@ public class Spot {
     private float mRating;
     private String mDescription;
 
+    public Spot(double aLatitude, double aLongitude, byte[] aImage, float aRating, String aDescription) {
+        this.mLatitude = aLatitude;
+        this.mLongitude = aLongitude;
+        this.mImage = aImage;
+        this.mRating = aRating;
+        this.mDescription = aDescription;
+    }
+
     public Spot(double aLatitude, double aLongitude, File aImage, float aRating, String aDescription) {
         this.setLatitude(aLatitude);
         this.setLongitude(aLongitude);
-        //this.setImage(aImage);
+        this.setImage(aImage);
         this.setRating(aRating);
         this.setDescription(aDescription);
     }
