@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
         startActivityForResult(builder.build(), 0);
 
-        Spots.getRemoteSpots();
+        //Spots.getRemoteSpots();
 
         mImageButtonMap = (ImageButton)findViewById(R.id.imageButtonMap);
         mImageButtonMap.setOnClickListener(new View.OnClickListener() {

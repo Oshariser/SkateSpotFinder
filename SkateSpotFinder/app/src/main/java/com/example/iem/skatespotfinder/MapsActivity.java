@@ -64,13 +64,13 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        List<Spot> lListSpot = Spots.getRemoteSpots();
+        /*List<Spot> lListSpot = Spots.getRemoteSpots();
         MarkerOptions lMarker;
         for(Spot lSpot : lListSpot){
             lMarker = new MarkerOptions();
             lMarker.position(new LatLng(lSpot.getLatitude(), lSpot.getLongitude()));
             mMap.addMarker(lMarker);
-        }
+        }*/
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Method.getCurrentLocalisation(this), 11.0f));
     }
 }
