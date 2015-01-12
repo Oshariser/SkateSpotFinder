@@ -3,13 +3,14 @@ package com.example.iem.skatespotfinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 
 
@@ -29,6 +30,8 @@ public class MainActivity extends Activity {
 
         ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
         startActivityForResult(builder.build(), 0);
+
+        Spots.getRemoteSpots();
 
         mImageButtonMap = (ImageButton)findViewById(R.id.imageButtonMap);
         mImageButtonMap.setOnClickListener(new View.OnClickListener() {
@@ -80,4 +83,23 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0){
+            if(resultCode == RESULT_OK){
+                ParseUser lCurrentUser = ParseUser.getCurrentUser();
+                if(lCurrentUser != null) {
+                    Toast.makeText(this, lCurrentUser.getUsername(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Error ParseUser is null", Toast.LENGTH_LONG).show();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                /*Toast.makeText(this, "You must be logged on !", Toast.LENGTH_LONG).show();
+                ParseLoginBuilder builder = new ParseLoginBuilder(MainActivity.this);
+                startActivityForResult(builder.build(), 0);*/
+                finish();
+            }
+        }
+    }
 }

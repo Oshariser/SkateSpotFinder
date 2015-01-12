@@ -107,10 +107,11 @@ public class AddSpotActivity extends Activity {
     }
 
     private void addSpot(Spot aSpot){
+        Spots.mSpots.add(aSpot);
         ParseObject lParseObject = new ParseObject("Spot");
         lParseObject.put("localisation", new ParseGeoPoint(aSpot.getLatitude(), aSpot.getLongitude()));
-        ParseFile lParsefile = new ParseFile("Pic.jpg", aSpot.getImage());
-        lParseObject.put("photo", lParsefile);
+        ParseFile lParseFile = new ParseFile("Pic.jpg", aSpot.getImage());
+        lParseObject.put("photo", lParseFile);
         lParseObject.put("rating", aSpot.getRating());
         lParseObject.put("description", aSpot.getDescription());
         lParseObject.saveInBackground();

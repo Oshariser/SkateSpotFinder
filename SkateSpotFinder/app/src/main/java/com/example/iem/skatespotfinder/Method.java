@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 
@@ -28,5 +33,18 @@ public class Method {
             lBitmap = BitmapFactory.decodeFile(lFile.getAbsolutePath());
         }
         return lBitmap;
+    }
+
+    public static LatLng getCurrentLocalisation(Context aContext){
+        LatLng lLatLng = null;
+        LocationManager lLocationManager = null;
+        LocationListener lLocationListener;
+        lLocationManager = (LocationManager) aContext.getSystemService(Context.LOCATION_SERVICE);
+        lLocationListener = new MyLocationListener();
+        lLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, lLocationListener);
+        if (lLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            lLatLng = new LatLng(MyLocationListener.mLatitude, MyLocationListener.mLongitude);
+        }
+        return lLatLng;
     }
 }

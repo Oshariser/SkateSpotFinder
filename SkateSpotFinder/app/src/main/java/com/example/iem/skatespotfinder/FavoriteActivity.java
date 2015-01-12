@@ -56,6 +56,6 @@ public class FavoriteActivity extends Activity {
         list.add(new Spot(null, 4 ,"description 2"));
         list.add(new Spot(null, 6 ,"description 3"));
         */
-        return list;
+        return Spots.mSpots;
     }
 }
