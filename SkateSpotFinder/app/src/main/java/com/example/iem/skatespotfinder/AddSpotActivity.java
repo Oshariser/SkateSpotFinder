@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -54,7 +52,14 @@ public class AddSpotActivity extends Activity {
         mButtonGetLocalisation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocalisation();
+                //getCurrentLocation();
+                GpsTracker lGpsTracker = new GpsTracker(AddSpotActivity.this);
+                if (lGpsTracker.canGetLocation()) {
+                    mTextViewLatitude.setText("Latitude : " + String.valueOf(lGpsTracker.getLatitude()));
+                    mTextViewLongitude.setText("Longitude : " + String.valueOf(lGpsTracker.getLongitude()));
+                } else {
+                    lGpsTracker.showSettingsAlert();
+                }
             }
         });
         mTextViewLatitude = (TextView) findViewById(R.id.textViewLatitude);
@@ -77,6 +82,10 @@ public class AddSpotActivity extends Activity {
                 addSpot(lSpot);
             }
         });
+
+        mTextViewLatitude.setText("Latitude : " + MyLocationListener.mLatitude);
+        mTextViewLongitude.setText("Longitude : " + MyLocationListener.mLongitude);
+
     }
 
     private void takePicture() {
@@ -116,7 +125,7 @@ public class AddSpotActivity extends Activity {
         lParseObject.saveInBackground();
     }
 
-    private void getCurrentLocalisation(){
+    private void getCurrentLocation(){
         LocationManager lLocationManager = null;
         LocationListener lLocationListener;
         lLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
