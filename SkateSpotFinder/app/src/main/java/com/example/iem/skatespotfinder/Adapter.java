@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.image.SmartImageView;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +33,7 @@ public class Adapter extends ArrayAdapter<Spot>{
     }
 
     static class ViewHolder {
-        protected ImageView imageView;
+        protected SmartImageView imageView;
         protected TextView textView;
         protected ImageButton imageButton;
     }
@@ -43,7 +45,7 @@ public class Adapter extends ArrayAdapter<Spot>{
             LayoutInflater lInflator = mContext.getLayoutInflater();
             lView = lInflator.inflate(R.layout.row_layout, null);
             final ViewHolder lViewHolder = new ViewHolder();
-            lViewHolder.imageView = (ImageView) lView.findViewById(R.id.imageView);
+            lViewHolder.imageView = (SmartImageView) lView.findViewById(R.id.imageViewCustom);
             lViewHolder.textView = (TextView) lView.findViewById(R.id.textView);
             lViewHolder.imageButton = (ImageButton) lView.findViewById(R.id.imageButton);
             lViewHolder.imageButton
@@ -61,7 +63,7 @@ public class Adapter extends ArrayAdapter<Spot>{
         }
         ViewHolder holder = (ViewHolder) lView.getTag();
         holder.textView.setText(mSpots.get(aPosition).getDescription() + " " + getAdressFromLatLong(mSpots.get(aPosition).getLatitude(), mSpots.get(aPosition).getLongitude()));
-        //holder.imageView.setImageResource();
+        holder.imageView.setImageUrl("http://files.parsetfss.com/a83b9050-e69f-49fb-9041-349111f6a219/tfss-b0a60bdf-aa74-42d6-a1ac-e3015f660c97-Pic.jpg");
         return lView;
     }
 
