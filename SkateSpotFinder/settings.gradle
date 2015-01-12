@@ -1,1 +1,1 @@
-include ':app', ':ParseLoginUI'
+include ':app', ':ParseLoginUI', ':android-smart-image-view-1.0.0'
