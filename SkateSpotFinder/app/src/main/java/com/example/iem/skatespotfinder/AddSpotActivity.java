@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -26,6 +27,10 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class AddSpotActivity extends Activity {
@@ -43,6 +48,8 @@ public class AddSpotActivity extends Activity {
     private RatingBar mRatingBarSpot;
     private EditText mEditTextDescription;
     private Button mButtonAddSpot;
+    String imagePath;
+    private final static String TAG = "AddSpotActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +96,11 @@ public class AddSpotActivity extends Activity {
     }
 
     private void takePicture() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        mFile = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(mFile));
-        mUri = Uri.fromFile(mFile);
-        startActivityForResult(intent, TAKE_PICTURE);
+        String name =   dateToString(new Date(),"yyyy-MM-dd-hh-mm-ss");
+        mFile = new File(Environment.getExternalStorageDirectory(), name + ".jpg");
+        Intent lIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        lIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mFile));
+        startActivityForResult(lIntent, TAKE_PICTURE);
     }
 
     @Override
@@ -116,9 +122,10 @@ public class AddSpotActivity extends Activity {
     }
 
     private void addSpot(Spot aSpot){
+        Spots.mSpots.add(aSpot);
         ParseObject lParseObject = new ParseObject("Spot");
         lParseObject.put("localisation", new ParseGeoPoint(aSpot.getLatitude(), aSpot.getLongitude()));
-        ParseFile lParseFile = new ParseFile("Pic.jpg", aSpot.getImage());
+        ParseFile lParseFile = new ParseFile(mFile.getAbsolutePath(), aSpot.getImage());
         lParseObject.put("photo", lParseFile);
         lParseObject.put("rating", aSpot.getRating());
         lParseObject.put("description", aSpot.getDescription());
@@ -146,7 +153,18 @@ public class AddSpotActivity extends Activity {
         switch (requestCode) {
             case TAKE_PICTURE:
                 if (resultCode == Activity.RESULT_OK) {
-                    setImageSpot();
+                    //setImageSpot();
+                    try {
+                        FileInputStream in = new FileInputStream(mFile);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 10;
+                        imagePath = mFile.getAbsolutePath();
+                        mEditTextDescription.setText(imagePath);
+                        Bitmap bmp = BitmapFactory.decodeStream(in, null, options);
+                        mImageViewSpot.setImageBitmap(bmp);
+                    } catch (FileNotFoundException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
                 }
         }
     }
@@ -161,8 +179,13 @@ public class AddSpotActivity extends Activity {
             mImageViewSpot.setImageBitmap(lBitmap);
         } catch (Exception e) {
             Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
-            Log.e("Camera", e.toString());
+            Log.e(TAG, e.toString());
         }
+    }
+
+    public String dateToString(Date date, String format) {
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        return df.format(date);
     }
 
 }
